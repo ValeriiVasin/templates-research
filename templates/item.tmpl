@@ -1,0 +1,146 @@
+<li class="b-lenta-item" <TMPL_IF adid>id="b-friendstimes-item-ad-<TMPL_VAR adid>"</TMPL_IF> data-sorttime="<TMPL_VAR sorttime>" <TMPL_IF adinfo_ehtml>data-adinfo="<TMPL_VAR adinfo_ehtml>"</TMPL_IF>>
+    <div class="b-lenta-item-wrapper">
+        <div class="b-lenta-item-header">
+            <TMPL_IF userpic_present>
+            <div class="b-lenta-item-userpic">
+                <div class="b-userpic-wrap">
+                <div class="b-userpic-inner">
+                    <img width="<TMPL_VAR userpic_width>"
+                        height="<TMPL_VAR userpic_height>"
+                        class="ContextualPopup"
+                        alt=""
+                        src="<TMPL_VAR userpic_url>" />
+                </div>
+                </div>
+            </div>
+            </TMPL_IF>
+
+            <div class="b-lenta-item-meta">
+                <p class="b-lenta-item-journal">
+                    <TMPL_VAR entry_title>
+                </p>
+
+                <ul class="b-item-type">
+                    <TMPL_IF show_security>
+                        <li class="b-item-type-post b-item-type-security-<TMPL_VAR security>"
+                            title="<TMPL_VAR security_description>"><TMPL_VAR security_description></li>
+                    </TMPL_IF>
+
+                    <TMPL_IF is_reposted>
+                        <li class="b-item-type-repost"
+                        title="<TMPL_VAR expr="ml('friendsfeed.status.repost')">"><TMPL_VAR expr="ml('friendsfeed.status.repost')"></li>
+                    </TMPL_IF>
+
+                    <TMPL_IF is_ad>
+                        <li class="b-item-type-ad i-friendsfeed-ad-close"
+                        data-adid='<TMPL_VAR adid>'><TMPL_VAR expr="ml('friendsfeed.note.ad')"></li>
+                    </TMPL_IF>
+                </ul>
+
+            </div>
+
+            <p class="b-lenta-item-date"><TMPL_VAR timestamp></p>
+
+            <h3 class="b-lenta-item-title"><a href="<TMPL_VAR permalink_url>"><TMPL_VAR subject></a></h3>
+        </div>
+        <div class="b-lenta-item-content">
+            <TMPL_VAR body>
+        </div>
+
+        <div class='b-lenta-item-nav <TMPL_IF expr="(mood_present + music_present + location_present + tags_present) == 1"> b-lenta-meta-open</TMPL_IF>'>
+            <div class="b-lenta-item-nav-in">
+
+                <TMPL_IF expr="mood_present || music_present || location_present || tags_present">
+
+
+                    <TMPL_IF light_version>
+                    <TMPL_UNLESS expr="(mood_present + music_present + location_present + tags_present) == 1">
+                        <div class="b-lenta-metatoggle">
+                            <span><TMPL_VAR expr="ml('friendsfeed.meta.toggle')"></span>
+                        </div>
+                    </TMPL_UNLESS>
+                    </TMPL_IF>
+
+
+                    <ul class="b-lenta-item-metainfo">
+                        <TMPL_IF mood_present>
+                            <li class="b-lenta-metaitem b-lenta-item-mood">
+                                <dl>
+                                    <dt><span <TMPL_UNLESS expr="(mood_present + music_present + location_present + tags_present) == 1">class="b-lenta-metatoggle-target"</TMPL_UNLESS> ><TMPL_VAR expr="ml('friendsfeed.metaitem.mood')"></span></dt>
+                                    <dd>
+                                        <TMPL_VAR mood>
+                                    </dd>
+                                </dl>
+                            </li>
+                        </TMPL_IF>
+
+                        <TMPL_IF music_present>
+                            <li class="b-lenta-metaitem b-lenta-item-music">
+                                <dl>
+                                    <dt><span <TMPL_UNLESS expr="(mood_present + music_present + location_present + tags_present) == 1">class="b-lenta-metatoggle-target"</TMPL_UNLESS> ><TMPL_VAR expr="ml('friendsfeed.metaitem.music')"></span></dt>
+                                    <dd>
+                                        <TMPL_VAR music>
+                                    </dd>
+                                </dl>
+                            </li>
+                        </TMPL_IF>
+
+                        <TMPL_IF location_present>
+                            <li class="b-lenta-metaitem b-lenta-item-location">
+                                <dl>
+                                    <dt><span <TMPL_UNLESS expr="(mood_present + music_present + location_present + tags_present) == 1">class="b-lenta-metatoggle-target"</TMPL_UNLESS> ><TMPL_VAR expr="ml('friendsfeed.metaitem.location')"></span></dt>
+                                    <dd>
+                                        <TMPL_VAR location>
+                                    </dd>
+                                </dl>
+                            </li>
+                        </TMPL_IF>
+
+                        <TMPL_IF tags_present>
+                            <li class="b-lenta-metaitem b-lenta-item-tags">
+                                <dl>
+                                    <dt>
+                                        <TMPL_IF light_version>
+                                            <span <TMPL_UNLESS expr="(mood_present + music_present + location_present + tags_present) == 1">class="b-lenta-metatoggle-target"</TMPL_UNLESS> ><TMPL_VAR meta_tags_title_light></span>
+                                        <TMPL_ELSE>
+                                            <span <TMPL_UNLESS expr="(mood_present + music_present + location_present + tags_present) == 1">class="b-lenta-metatoggle-target"</TMPL_UNLESS> ><TMPL_VAR meta_tags_title></span>
+                                        </TMPL_IF>
+                                    </dt>
+                                    <dd>
+                                        <TMPL_LOOP tags>
+                                            <a href="<TMPL_VAR link>"><TMPL_VAR name></a>
+                                        </TMPL_LOOP>
+                                    </dd>
+                                </dl>
+                            </li>
+                        </TMPL_IF>
+                    </ul>
+
+                </TMPL_IF>
+
+                <div class="b-lenta-item-nav-wrap clearfix-lj">
+                    <ul class='b-lenta-item-nav-aside'>
+                        <TMPL_LOOP comments_links>
+                            <li>
+                                <a href="<TMPL_VAR url>" <TMPL_IF id>id="<TMPL_VAR id>"</TMPL_IF>>
+                                    <TMPL_VAR name>
+                                </a>
+                            </li>
+                        </TMPL_LOOP>
+                    </ul>
+
+                    <ul class='b-lenta-item-nav-share'>
+                        <TMPL_LOOP linkbar>
+                            <li>
+                                <a class="<TMPL_VAR css_class>" href="<TMPL_VAR url>" <TMPL_IF id>id="<TMPL_VAR id>"</TMPL_IF> <TMPL_VAR extra_attributes>>
+                                    <TMPL_VAR name>
+                                </a>
+                            </li>
+                        </TMPL_LOOP>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</li>

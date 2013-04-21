@@ -1,0 +1,10 @@
+{
+    "name": "HTML-Template-Pro-to-Underscore-template-compiler",
+    "description": "HTML-Template-Pro-to-Underscore-template-compiler",
+    "dependencies": {
+        "grunt": "*",
+        "grunt-contrib-watch": "*",
+        "grunt-contrib-nodeunit": "*",
+        "nodeunit": "*"
+    }
+}

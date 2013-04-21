@@ -1,0 +1,146 @@
+<li class="b-lenta-item" <% if (typeof adid !== 'undefined' && adid) { %>id="b-friendstimes-item-ad-<%= adid %>"<% } %> data-sorttime="<%= sorttime %>" <% if (typeof adinfo_ehtml !== 'undefined' && adinfo_ehtml) { %>data-adinfo="<%= adinfo_ehtml %>"<% } %>>
+    <div class="b-lenta-item-wrapper">
+        <div class="b-lenta-item-header">
+            <% if (typeof userpic_present !== 'undefined' && userpic_present) { %>
+            <div class="b-lenta-item-userpic">
+                <div class="b-userpic-wrap">
+                <div class="b-userpic-inner">
+                    <img width="<%= userpic_width %>"
+                        height="<%= userpic_height %>"
+                        class="ContextualPopup"
+                        alt=""
+                        src="<%= userpic_url %>" />
+                </div>
+                </div>
+            </div>
+            <% } %>
+
+            <div class="b-lenta-item-meta">
+                <p class="b-lenta-item-journal">
+                    <%= entry_title %>
+                </p>
+
+                <ul class="b-item-type">
+                    <% if (typeof show_security !== 'undefined' && show_security) { %>
+                        <li class="b-item-type-post b-item-type-security-<%= security %>"
+                            title="<%= security_description %>"><%= security_description %></li>
+                    <% } %>
+
+                    <% if (typeof is_reposted !== 'undefined' && is_reposted) { %>
+                        <li class="b-item-type-repost"
+                        title="<%= ml('friendsfeed.status.repost') %>"><%= ml('friendsfeed.status.repost') %></li>
+                    <% } %>
+
+                    <% if (typeof is_ad !== 'undefined' && is_ad) { %>
+                        <li class="b-item-type-ad i-friendsfeed-ad-close"
+                        data-adid='<%= adid %>'><%= ml('friendsfeed.note.ad') %></li>
+                    <% } %>
+                </ul>
+
+            </div>
+
+            <p class="b-lenta-item-date"><%= timestamp %></p>
+
+            <h3 class="b-lenta-item-title"><a href="<%= permalink_url %>"><%= subject %></a></h3>
+        </div>
+        <div class="b-lenta-item-content">
+            <%= body %>
+        </div>
+
+        <div class='b-lenta-item-nav <% if ((mood_present + music_present + location_present + tags_present) == 1) { %> b-lenta-meta-open<% } %>'>
+            <div class="b-lenta-item-nav-in">
+
+                <% if (mood_present || music_present || location_present || tags_present) { %>
+
+
+                    <% if (typeof light_version !== 'undefined' && light_version) { %>
+                    <% if (!((mood_present + music_present + location_present + tags_present) == 1)) { %>
+                        <div class="b-lenta-metatoggle">
+                            <span><%= ml('friendsfeed.meta.toggle') %></span>
+                        </div>
+                    <% } %>
+                    <% } %>
+
+
+                    <ul class="b-lenta-item-metainfo">
+                        <% if (typeof mood_present !== 'undefined' && mood_present) { %>
+                            <li class="b-lenta-metaitem b-lenta-item-mood">
+                                <dl>
+                                    <dt><span <% if (!((mood_present + music_present + location_present + tags_present) == 1)) { %>class="b-lenta-metatoggle-target"<% } %> ><%= ml('friendsfeed.metaitem.mood') %></span></dt>
+                                    <dd>
+                                        <%= mood %>
+                                    </dd>
+                                </dl>
+                            </li>
+                        <% } %>
+
+                        <% if (typeof music_present !== 'undefined' && music_present) { %>
+                            <li class="b-lenta-metaitem b-lenta-item-music">
+                                <dl>
+                                    <dt><span <% if (!((mood_present + music_present + location_present + tags_present) == 1)) { %>class="b-lenta-metatoggle-target"<% } %> ><%= ml('friendsfeed.metaitem.music') %></span></dt>
+                                    <dd>
+                                        <%= music %>
+                                    </dd>
+                                </dl>
+                            </li>
+                        <% } %>
+
+                        <% if (typeof location_present !== 'undefined' && location_present) { %>
+                            <li class="b-lenta-metaitem b-lenta-item-location">
+                                <dl>
+                                    <dt><span <% if (!((mood_present + music_present + location_present + tags_present) == 1)) { %>class="b-lenta-metatoggle-target"<% } %> ><%= ml('friendsfeed.metaitem.location') %></span></dt>
+                                    <dd>
+                                        <%= location %>
+                                    </dd>
+                                </dl>
+                            </li>
+                        <% } %>
+
+                        <% if (typeof tags_present !== 'undefined' && tags_present) { %>
+                            <li class="b-lenta-metaitem b-lenta-item-tags">
+                                <dl>
+                                    <dt>
+                                        <% if (typeof light_version !== 'undefined' && light_version) { %>
+                                            <span <% if (!((mood_present + music_present + location_present + tags_present) == 1)) { %>class="b-lenta-metatoggle-target"<% } %> ><%= meta_tags_title_light %></span>
+                                        <% } else { %>
+                                            <span <% if (!((mood_present + music_present + location_present + tags_present) == 1)) { %>class="b-lenta-metatoggle-target"<% } %> ><%= meta_tags_title %></span>
+                                        <% } %>
+                                    </dt>
+                                    <dd>
+                                        <% tags.forEach(function (__tmp) { %><% with (__tmp) { %>
+                                            <a href="<%= link %>"><%= name %></a>
+                                        <% } %><% }); %>
+                                    </dd>
+                                </dl>
+                            </li>
+                        <% } %>
+                    </ul>
+
+                <% } %>
+
+                <div class="b-lenta-item-nav-wrap clearfix-lj">
+                    <ul class='b-lenta-item-nav-aside'>
+                        <% comments_links.forEach(function (__tmp) { %><% with (__tmp) { %>
+                            <li>
+                                <a href="<%= url %>" <% if (typeof id !== 'undefined' && id) { %>id="<%= id %>"<% } %>>
+                                    <%= name %>
+                                </a>
+                            </li>
+                        <% } %><% }); %>
+                    </ul>
+
+                    <ul class='b-lenta-item-nav-share'>
+                        <% linkbar.forEach(function (__tmp) { %><% with (__tmp) { %>
+                            <li>
+                                <a class="<%= css_class %>" href="<%= url %>" <% if (typeof id !== 'undefined' && id) { %>id="<%= id %>"<% } %> <%= extra_attributes %>>
+                                    <%= name %>
+                                </a>
+                            </li>
+                        <% } %><% }); %>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</li>
