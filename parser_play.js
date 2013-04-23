@@ -4,4 +4,8 @@ var content = require('fs').readFileSync('templates/item.tmpl', 'utf-8'),
 
 var parsed = parser.parse(content);
 
-console.log(parsed);
+console.log(
+    parsed.filter(function (arg) {
+        return typeof arg !== 'string';
+    })
+);

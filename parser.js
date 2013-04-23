@@ -109,17 +109,50 @@ Parser.prototype.parse = function (content) {
  * @param {String} data.text    Not parsed tag text including tag itself
  */
 function Tag(data) {
-    this.parsed = false;
     this.attrs = {
         __noname: []
     };
+
+    this.tagName = data.tagName;
+    this.text = data.text;
+
+    this.parseAttributes();
 }
+
+Tag.prototype.parseAttributes = function () {
+    var attributes = this.text.slice(
+            this.tagName.length + 1,
+            this.text.indexOf('>', this.tagName.length + 1)
+        ).trim(),
+        attrs = this.attrs;
+
+    // parse named attrs with quotes
+    attributes = attributes.replace(/(\w+)=('|")([\s\S]*)\2/gim, function (str, attr, quote, value) {
+        attrs[ attr.toLowerCase() ] = value;
+        return '';
+    });
+
+    // parse named attrs without quotes
+    attributes = attributes.replace(/(\w+)=(\w+)/gim, function (str, attr, value) {
+        attrs[ attr.toLowerCase() ] = value;
+        return '';
+    });
+
+    // parse attrs without name (single attrs)
+    attributes.trim().replace(/\s+/, ' ');
+    if (attributes) {
+        attrs.__noname = attributes.split(' ');
+    }
+};
 
 /**
  * Attr accessor
  */
-Tag.prototype.attr = function () {
-
+Tag.prototype.attr = function (name) {
+    if (typeof name === 'undefined') {
+        return this.attrs;
+    }
+    return this.attrs[name];
 };
 
 Tag.prototype.toString = function () {
