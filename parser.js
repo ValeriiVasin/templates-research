@@ -157,6 +157,12 @@ Tag.prototype.parseBody = function () {
     this.parsedBody = Parser.prototype.parse( this.innerText, this );
 };
 
+Tag.prototype.hasTags = function () {
+    this.parsedBody.some(function (chunk) {
+        return typeof chunk !== 'string';
+    });
+};
+
 /**
  * Attr accessor
  */
@@ -172,8 +178,7 @@ Tag.prototype.toString = function () {
         attributes = '',
         result = '',
         isSingle,
-        attr,
-        hasTags;
+        attr;
 
     // get attributes string
     for (attr in this.attrs) {
@@ -194,12 +199,7 @@ Tag.prototype.toString = function () {
 
     if ( !isSingle ) {
 
-        // has tags inside
-        hasTags = this.parsedBody.some(function (chunk) {
-            return typeof chunk !== 'string';
-        });
-
-        result += (hasTags ? Tag.join(this.parsedBody) : this.innerText) + '</' + this.tagName + '>';
+        result += (this.hasTags() ? Tag.join(this.parsedBody) : this.innerText) + '</' + this.tagName + '>';
     }
 
     return result;
