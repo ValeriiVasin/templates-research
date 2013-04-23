@@ -214,4 +214,21 @@ Tag.join = function (chunks) {
         .join('');
 };
 
+// underscore
+var _toString = Tag.prototype.toString;
+Tag.prototype.toString = function () {
+    var result;
+
+    switch (this.tagName) {
+        case 'TMPL_VAR':
+            result = '<%= ' + (this.attr('name') || this.attrs.__noname[0]) + ' %>';
+            break;
+        default:
+            result = _toString.apply(this, arguments);
+            break;
+    }
+
+    return result;
+};
+
 module.exports = Parser;
