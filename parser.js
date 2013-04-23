@@ -60,9 +60,10 @@ function findTag(content, _start) {
 
 function Parser(content) {
     this.content = content;
+    console.log( Tag.join(this.parse(content)) );
 }
 
-Parser.prototype.parse = function (content) {
+Parser.prototype.parse = function (content, parentTag) {
     var tags = [],
         // chunks with text and tag instances
         chunks = [],
@@ -88,7 +89,7 @@ Parser.prototype.parse = function (content) {
             );
 
             chunks.push(
-                new Tag(tag)
+                new Tag(tag, parentTag)
             );
 
             if (index === tagsLength - 1) {
@@ -107,20 +108,23 @@ Parser.prototype.parse = function (content) {
  * @param {Object} data         Data for tag creation
  * @param {String} data.tagName One of allowed tags
  * @param {String} data.text    Not parsed tag text including tag itself
+ * @param {Tag}    [parent]     Parent tag link
  */
-function Tag(data) {
+function Tag(data, parent) {
     this.attrs = {
         __noname: []
     };
 
     this.tagName = data.tagName;
     this.outerText = data.text;
+    this.parent = parent;
     this.innerText = this.outerText.slice(
         this.outerText.indexOf('>') + 1,
         this.outerText.lastIndexOf('<')
     );
 
     this.parseAttributes();
+    this.parseBody();
 }
 
 Tag.prototype.parseAttributes = function () {
@@ -149,6 +153,10 @@ Tag.prototype.parseAttributes = function () {
     }
 };
 
+Tag.prototype.parseBody = function () {
+    this.parsedBody = Parser.prototype.parse( this.innerText, this );
+};
+
 /**
  * Attr accessor
  */
@@ -160,7 +168,50 @@ Tag.prototype.attr = function (name) {
 };
 
 Tag.prototype.toString = function () {
-    return '### tag content ###';
+    var that = this,
+        attributes = '',
+        result = '',
+        isSingle,
+        attr,
+        hasTags;
+
+    // get attributes string
+    for (attr in this.attrs) {
+        if ( this.attrs.hasOwnProperty(attr) && attr !== '__noname') {
+            attributes += ' ' + attr + '="' + this.attrs[attr] + '"';
+        }
+    }
+
+    if (this.attrs.__noname.length) {
+        attributes += ' ' + this.attrs.__noname.join(' ');
+    }
+
+    result += '<' + this.tagName + attributes + '>';
+
+    isSingle = tags.filter(function (tag) {
+        return that.tagName === tag.name;
+    })[0].single;
+
+    if ( !isSingle ) {
+
+        // has tags inside
+        hasTags = this.parsedBody.some(function (chunk) {
+            return typeof chunk !== 'string';
+        });
+
+        result += (hasTags ? Tag.join(this.parsedBody) : this.innerText) + '</' + this.tagName + '>';
+    }
+
+    return result;
+};
+
+// join chunks of text and tags
+Tag.join = function (chunks) {
+    return chunks
+        .map(function (chunk) {
+            return typeof chunk === 'string' ? chunk : chunk.toString();
+        })
+        .join('');
 };
 
 module.exports = Parser;
