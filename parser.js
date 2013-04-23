@@ -222,8 +222,14 @@ Tag.prototype.toString = function () {
 
     switch (this.tagName) {
         case 'TMPL_VAR':
-            result = '<%= ' + (this.attr('name') || this.attrs.__noname[0]) + ' %>';
+            if ( this.attr('expr') ) {
+                expr = this.attr('expr');
+            } else {
+                expr = this.attr('name') || this.attrs.__noname[0];
+            }
+            result = '<%= ' + expr + ' %>';
             break;
+
         case 'TMPL_IF':
             if ( this.attr('expr') ) {
                 expr = this.attr('expr');
