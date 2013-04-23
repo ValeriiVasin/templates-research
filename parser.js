@@ -91,7 +91,7 @@ Parser.prototype.parse = function (content) {
                 new Tag(tag)
             );
 
-            if (index === tagsLength) {
+            if (index === tagsLength - 1) {
                 chunks.push(
                     content.slice(tags[ tags.length - 1 ].end)
                 );
