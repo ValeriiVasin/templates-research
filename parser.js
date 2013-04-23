@@ -64,19 +64,66 @@ function Parser(content) {
 
 Parser.prototype.parse = function (content) {
     var tags = [],
+        // chunks with text and tag instances
+        chunks = [],
         tag,
-        start;
+        start,
+        tagsLength;
 
     do {
         start = tag ? tag.end : 0;
-        console.log(start);
         tag = findTag(content, start);
         if (tag) {
             tags.push(tag);
         }
-    } while (tag && tags.length < 20);
+    } while (tag);
 
-    return tags;
+    tagsLength = tags.length;
+    if (tagsLength === 0) {
+        chunks.push(content);
+    } else {
+        tags.forEach(function (tag, index) {
+            chunks.push(
+                content.slice(index === 0 ? 0 : tags[index - 1].end, tag.start)
+            );
+
+            chunks.push(
+                new Tag(tag)
+            );
+
+            if (index === tagsLength) {
+                chunks.push(
+                    content.slice(tags[ tags.length - 1 ].end)
+                );
+            }
+        });
+    }
+
+    return chunks;
+};
+
+/**
+ * Tag object
+ * @param {Object} data         Data for tag creation
+ * @param {String} data.tagName One of allowed tags
+ * @param {String} data.text    Not parsed tag text including tag itself
+ */
+function Tag(data) {
+    this.parsed = false;
+    this.attrs = {
+        __noname: []
+    };
+}
+
+/**
+ * Attr accessor
+ */
+Tag.prototype.attr = function () {
+
+};
+
+Tag.prototype.toString = function () {
+    return '### tag content ###';
 };
 
 module.exports = Parser;
