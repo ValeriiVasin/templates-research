@@ -114,15 +114,19 @@ function Tag(data) {
     };
 
     this.tagName = data.tagName;
-    this.text = data.text;
+    this.outerText = data.text;
+    this.innerText = this.outerText.slice(
+        this.outerText.indexOf('>') + 1,
+        this.outerText.lastIndexOf('<')
+    );
 
     this.parseAttributes();
 }
 
 Tag.prototype.parseAttributes = function () {
-    var attributes = this.text.slice(
+    var attributes = this.outerText.slice(
             this.tagName.length + 1,
-            this.text.indexOf('>', this.tagName.length + 1)
+            this.outerText.indexOf('>', this.tagName.length + 1)
         ).trim(),
         attrs = this.attrs;
 
