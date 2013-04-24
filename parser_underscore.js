@@ -97,6 +97,13 @@ Tag.prototype.toString = function () {
             ].join('');
             break;
 
+        case 'TMPL_INCLUDE':
+            /**
+             * @todo Implement
+             */
+
+            // fall through
+
         default:
             result = _toString.apply(this, arguments);
             break;
