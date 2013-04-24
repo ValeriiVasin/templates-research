@@ -98,11 +98,11 @@ Tag.prototype.toString = function () {
             break;
 
         case 'TMPL_INCLUDE':
-            /**
-             * @todo Implement
-             */
-
-            // fall through
+            expr = this.attr('name') || this.attrs.__noname[0];
+            result = '<!-- TMPL_INCLUDE start: ' + expr + ' -->';
+            result += Tag.include( expr );
+            result += '<!-- TMPL_INCLUDE end: ' + expr + ' -->';
+            break;
 
         default:
             result = _toString.apply(this, arguments);

@@ -1,12 +1,15 @@
 var tags = [
-    { name: 'TMPL_VAR', single: true },
-    { name: 'TMPL_IF', single: false },
-    { name: 'TMPL_ELSE', single: true },
-    { name: 'TMPL_ELSIF', single: true },
-    { name: 'TMPL_UNLESS', single: false },
-    { name: 'TMPL_LOOP', single: false },
-    { name: 'TMPL_INCLUDE', single: true }
-];
+        { name: 'TMPL_VAR', single: true },
+        { name: 'TMPL_IF', single: false },
+        { name: 'TMPL_ELSE', single: true },
+        { name: 'TMPL_ELSIF', single: true },
+        { name: 'TMPL_UNLESS', single: false },
+        { name: 'TMPL_LOOP', single: false },
+        { name: 'TMPL_INCLUDE', single: true }
+    ],
+    fs = require('fs'),
+    path = require('path');
+
 
 function matchesCount(content, needle) {
     return content.split(needle).length - 1;
@@ -225,5 +228,45 @@ Tag.parseTemplate = function (content) {
         this.parse(content)
     );
 };
+
+Tag.parseFile = function (file) {
+    var content;
+
+    this.filebase = path.dirname(
+        path.resolve(this.base || __dirname, file)
+    );
+    content = fs.readFileSync(file, 'utf-8');
+
+    return this.parseTemplate(content);
+};
+
+Tag.setBase = function (base) {
+    this.base = base;
+};
+
+Tag.include = function (filename) {
+    var relativePath,
+        absolutePath;
+
+    // unwrap quotes that could be in filename
+    if (
+        filename.charAt(0) === filename.charAt( filename.length - 1 ) &&
+        filename.charAt(0) === '\'' || filename.charAt(0) === '"'
+    ) {
+        filename = filename.slice(1, -1);
+    }
+
+    relativePath = path.resolve( Tag.filebase || __dirname, filename),
+    absolutePath = path.resolve( Tag.base || __dirname, filename);
+
+    if ( fs.existsSync(relativePath) ) {
+        return Tag.parseFile(relativePath);
+    } else if ( fs.existsSync(absolutePath) ) {
+        return Tag.parseFile(absolutePath);
+    } else {
+        return '<!-- nothing to include -->';
+    }
+};
+
 
 module.exports = Tag;

@@ -1,6 +1,9 @@
 var fs = require('fs'),
-    Tag = require('./parser_underscore');
+    Tag = require('./parser_underscore'),
+    file = './parser/templates/FriendsPage/friends.tmpl';
 
-var content = fs.readFileSync('parser/templates/FriendsPage/item.tmpl', 'utf-8');
+Tag.setBase('parser');
 
-console.log( Tag.parseTemplate(content) );
+console.log(
+    Tag.parseFile(file)
+);
