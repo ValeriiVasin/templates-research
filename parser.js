@@ -1,8 +1,8 @@
 var tags = [
     { name: 'TMPL_VAR', single: true },
     { name: 'TMPL_IF', single: false },
-    { name: 'TMPL_ELSIF', single: true },
     { name: 'TMPL_ELSE', single: true },
+    { name: 'TMPL_ELSIF', single: true },
     { name: 'TMPL_UNLESS', single: false },
     { name: 'TMPL_LOOP', single: false },
     { name: 'TMPL_INCLUDE', single: true }

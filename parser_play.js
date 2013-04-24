@@ -1,6 +1,7 @@
-var content = require('fs').readFileSync('templates/item.tmpl', 'utf-8'),
+var fs = require('fs'),
     Tag = require('./parser_underscore');
 
+var content = fs.readFileSync('parser/templates/FriendsPage/item.tmpl', 'utf-8');
 var parsed = Tag.join(
     Tag.parse(content)
 );
