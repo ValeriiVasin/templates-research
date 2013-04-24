@@ -215,4 +215,15 @@ Tag.parse = function (content, parentTag) {
     return chunks;
 };
 
+/**
+ * Parse template and return other template HTML
+ * @param  {String} content Content to parse
+ * @return {String}         Result
+ */
+Tag.parseTemplate = function (content) {
+    return this.join(
+        this.parse(content)
+    );
+};
+
 module.exports = Tag;
