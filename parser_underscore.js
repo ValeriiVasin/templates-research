@@ -41,9 +41,9 @@ Tag.prototype.toString = function () {
             if ( this.attr('expr') ) {
                 expr = cleanExpr( this.attr('expr') );
             } else if ( this.attr('name') ) {
-                expr = 'typeof ' + this.attr('name') + ' !== "undefined" && ' + this.attr('name');
+                expr = 'typeof ' + this.attr('name') + ' !== \'undefined\' && ' + this.attr('name');
             } else {
-                expr = 'typeof ' + this.attrs.__noname[0] + ' !== "undefined" && ' + this.attrs.__noname[0];
+                expr = 'typeof ' + this.attrs.__noname[0] + ' !== \'undefined\' && ' + this.attrs.__noname[0];
             }
 
             result = '<% if (' + expr + ') { %>'+ Tag.join(this.parsedBody) +'<% } %>';
@@ -57,9 +57,9 @@ Tag.prototype.toString = function () {
             if ( this.attr('expr') ) {
                 expr = cleanExpr( this.attr('expr') );
             } else if ( this.attr('name') ) {
-                expr = 'typeof ' + this.attr('name') + ' !== "undefined" && ' + this.attr('name');
+                expr = 'typeof ' + this.attr('name') + ' !== \'undefined\' && ' + this.attr('name');
             } else {
-                expr = 'typeof ' + this.attrs.__noname[0] + ' !== "undefined" && ' + this.attrs.__noname[0];
+                expr = 'typeof ' + this.attrs.__noname[0] + ' !== \'undefined\' && ' + this.attrs.__noname[0];
             }
             result = '<% } else if ('+ expr +') { %>';
             break;
@@ -68,9 +68,9 @@ Tag.prototype.toString = function () {
             if ( this.attr('expr') ) {
                 expr = '!(' + cleanExpr( this.attr('expr') ) + ')';
             } else if ( this.attr('name') ) {
-                expr = 'typeof ' + this.attr('name') + ' === "undefined" || !' + this.attr('name');
+                expr = 'typeof ' + this.attr('name') + ' === \'undefined\' || !' + this.attr('name');
             } else {
-                expr = 'typeof ' + this.attrs.__noname[0] + ' === "undefined" || !' + this.attrs.__noname[0];
+                expr = 'typeof ' + this.attrs.__noname[0] + ' === \'undefined\' || !' + this.attrs.__noname[0];
             }
 
             result = '<% if (' + expr + ') { %>'+ Tag.join(this.parsedBody) +'<% } %>';
