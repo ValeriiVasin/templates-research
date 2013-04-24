@@ -1,10 +1,10 @@
 var tags = [
     { name: 'TMPL_VAR', single: true },
-    { name: 'TMPL_LOOP', single: false },
     { name: 'TMPL_IF', single: false },
     { name: 'TMPL_ELSIF', single: true },
     { name: 'TMPL_ELSE', single: true },
     { name: 'TMPL_UNLESS', single: false },
+    { name: 'TMPL_LOOP', single: false },
     { name: 'TMPL_INCLUDE', single: true }
 ];
 
@@ -58,51 +58,6 @@ function findTag(content, _start) {
     return tag;
 }
 
-function Parser(content) {
-    this.content = content;
-    console.log( Tag.join(this.parse(content)) );
-}
-
-Parser.prototype.parse = function (content, parentTag) {
-    var tags = [],
-        // chunks with text and tag instances
-        chunks = [],
-        tag,
-        start,
-        tagsLength;
-
-    do {
-        start = tag ? tag.end : 0;
-        tag = findTag(content, start);
-        if (tag) {
-            tags.push(tag);
-        }
-    } while (tag);
-
-    tagsLength = tags.length;
-    if (tagsLength === 0) {
-        chunks.push(content);
-    } else {
-        tags.forEach(function (tag, index) {
-            chunks.push(
-                content.slice(index === 0 ? 0 : tags[index - 1].end, tag.start)
-            );
-
-            chunks.push(
-                new Tag(tag, parentTag)
-            );
-
-            if (index === tagsLength - 1) {
-                chunks.push(
-                    content.slice(tags[ tags.length - 1 ].end)
-                );
-            }
-        });
-    }
-
-    return chunks;
-};
-
 /**
  * Tag object
  * @param {Object} data         Data for tag creation
@@ -154,7 +109,7 @@ Tag.prototype.parseAttributes = function () {
 };
 
 Tag.prototype.parseBody = function () {
-    this.parsedBody = Parser.prototype.parse( this.innerText, this );
+    this.parsedBody = Tag.parse( this.innerText, this );
 };
 
 Tag.prototype.hasTags = function () {
@@ -214,51 +169,50 @@ Tag.join = function (chunks) {
         .join('');
 };
 
-// underscore
-var _toString = Tag.prototype.toString;
-Tag.prototype.toString = function () {
-    var result,
-        expr;
+/**
+ * Parse content string into chunks of text and Tags
+ * @param  {String} content       String to parse
+ * @param  {Tag}    [parentTag]   Parent tag to link all parsed tags with
+ * @return {Array}                Array of chunks: String | Tag
+ */
+Tag.parse = function (content, parentTag) {
+    var tags = [],
+        // chunks with text and tag instances
+        chunks = [],
+        tag,
+        start,
+        tagsLength;
 
-    switch (this.tagName) {
-        case 'TMPL_VAR':
-            if ( this.attr('expr') ) {
-                expr = this.attr('expr');
-            } else {
-                expr = this.attr('name') || this.attrs.__noname[0];
+    do {
+        start = tag ? tag.end : 0;
+        tag = findTag(content, start);
+        if (tag) {
+            tags.push(tag);
+        }
+    } while (tag);
+
+    tagsLength = tags.length;
+    if (tagsLength === 0) {
+        chunks.push(content);
+    } else {
+        tags.forEach(function (tag, index) {
+            chunks.push(
+                content.slice(index === 0 ? 0 : tags[index - 1].end, tag.start)
+            );
+
+            chunks.push(
+                new Tag(tag, parentTag)
+            );
+
+            if (index === tagsLength - 1) {
+                chunks.push(
+                    content.slice(tags[ tags.length - 1 ].end)
+                );
             }
-            result = '<%= ' + expr + ' %>';
-            break;
-
-        case 'TMPL_IF':
-            if ( this.attr('expr') ) {
-                expr = this.attr('expr');
-            } else if ( this.attr('name') ) {
-                expr = 'typeof ' + this.attr('name') + ' !== "undefined" && ' + this.attr('name');
-            } else {
-                expr = 'typeof ' + this.attrs.__noname[0] + ' !== "undefined" && ' + this.attrs.__noname[0];
-            }
-
-            result = '<% if (' + expr + ') { %>'+ Tag.join(this.parsedBody) +'<% } %>';
-            break;
-
-        case 'TMPL_UNLESS':
-            if ( this.attr('expr') ) {
-                expr = '!(' + this.attr('expr') + ')';
-            } else if ( this.attr('name') ) {
-                expr = 'typeof ' + this.attr('name') + ' === "undefined" || ' + this.attr('name');
-            } else {
-                expr = 'typeof ' + this.attrs.__noname[0] + ' === "undefined" || ' + this.attrs.__noname[0];
-            }
-
-            result = '<% if (' + expr + ') { %>'+ Tag.join(this.parsedBody) +'<% } %>';
-            break;
-        default:
-            result = _toString.apply(this, arguments);
-            break;
+        });
     }
 
-    return result;
+    return chunks;
 };
 
-module.exports = Parser;
+module.exports = Tag;

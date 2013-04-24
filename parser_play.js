@@ -1,5 +1,8 @@
 var content = require('fs').readFileSync('templates/item.tmpl', 'utf-8'),
-    Parser = require('./parser'),
-    parser = new Parser(content);
+    Tag = require('./parser_underscore');
 
-var parsed = parser.parse(content);
+var parsed = Tag.join(
+    Tag.parse(content)
+);
+
+console.log(parsed);
