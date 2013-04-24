@@ -58,6 +58,27 @@ Tag.prototype.toString = function () {
             result = '<% if (' + expr + ') { %>'+ Tag.join(this.parsedBody) +'<% } %>';
             break;
 
+        case 'TMPL_LOOP':
+            if ( this.attr('name') ) {
+                expr = this.attr('name');
+            } else {
+                expr = this.attrs.__noname[0];
+            }
+            result = [
+                '<% ', expr ,'.forEach(function (__value__, __counter__, __array__) { %>',
+                '<% var __length__ = __array__.length; %>',
+                '<% var __first__ = __counter__ === 0; %>',
+                '<% var __last__ = __counter__ === __length__ - 1; %>',
+                '<% var __inner__ = __counter__ > 0 && __counter < __length__ - 1; %>',
+                '<% var __odd__ = __counter__ % 0 === 0; %>',
+                '<% var __even__ = !__odd__ %>',
+
+                '<% with (__value__) { %>',
+                    Tag.join( this.parsedBody ),
+                '<% } %><% }); %>'
+            ].join('');
+            break;
+
         default:
             result = _toString.apply(this, arguments);
             break;
