@@ -5,6 +5,24 @@
 var Tag = require('./parser'),
     _toString = Tag.prototype.toString;
 
+/**
+ * Clean expressions from perl-based comparators
+ * @param  {String} statement Expression code to clean
+ * @return {String}           Statement with javascript-based operators
+ */
+function cleanExpr(statement) {
+    /**
+     * @todo Improve algorithm to prevent replacement of strings like 'he eq me'
+     */
+    return statement
+        .replace(/ gt /g, ' > ')
+        .replace(/ lt /g, ' < ')
+        .replace(/ eq /g, ' === ')
+        .replace(/ ne /g, ' !== ')
+        .replace(/ ge /g, ' >= ')
+        .replace(/ le /g, ' <= ');
+}
+
 Tag.prototype.toString = function () {
     var result,
         expr;
@@ -21,7 +39,7 @@ Tag.prototype.toString = function () {
 
         case 'TMPL_IF':
             if ( this.attr('expr') ) {
-                expr = this.attr('expr');
+                expr = cleanExpr( this.attr('expr') );
             } else if ( this.attr('name') ) {
                 expr = 'typeof ' + this.attr('name') + ' !== "undefined" && ' + this.attr('name');
             } else {
@@ -37,7 +55,7 @@ Tag.prototype.toString = function () {
 
         case 'TMPL_ELSIF':
             if ( this.attr('expr') ) {
-                expr = this.attr('expr');
+                expr = cleanExpr( this.attr('expr') );
             } else if ( this.attr('name') ) {
                 expr = 'typeof ' + this.attr('name') + ' !== "undefined" && ' + this.attr('name');
             } else {
@@ -48,7 +66,7 @@ Tag.prototype.toString = function () {
 
         case 'TMPL_UNLESS':
             if ( this.attr('expr') ) {
-                expr = '!(' + this.attr('expr') + ')';
+                expr = '!(' + cleanExpr( this.attr('expr') ) + ')';
             } else if ( this.attr('name') ) {
                 expr = 'typeof ' + this.attr('name') + ' === "undefined" || ' + this.attr('name');
             } else {
