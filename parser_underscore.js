@@ -87,7 +87,7 @@ Tag.prototype.toString = function () {
                 '<% var __length__ = __array__.length; %>',
                 '<% var __first__ = __counter__ === 0; %>',
                 '<% var __last__ = __counter__ === __length__ - 1; %>',
-                '<% var __inner__ = __counter__ > 0 && __counter < __length__ - 1; %>',
+                '<% var __inner__ = __counter__ > 0 && __counter__ < __length__ - 1; %>',
                 '<% var __odd__ = __counter__ % 0 === 0; %>',
                 '<% var __even__ = !__odd__ %>',
 
