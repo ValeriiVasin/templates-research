@@ -1,3 +1,4 @@
-parser
+parser/templates
+parser/underscore_templates
 node_modules
 .DS_Store
