@@ -1,3 +1,9 @@
+/**
+ * @todo Optimize findTag function: parse tag sequentially one by on and only one
+ * @todo Prettify code
+ * @todo Change instances names and methods inclusion in each of them
+ */
+
 var tags = [
         { name: 'TMPL_VAR', single: true },
         { name: 'TMPL_IF', single: false },
